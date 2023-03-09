@@ -36,9 +36,21 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.virtual('friendCount').get(function () {
-  return this.friends.length;
-});
+// userSchema.virtual('friendCount').get(function () {
+//   return this.friends.length;
+// });
+
+// userSchema.virtual('thoughtCount').get(function () {
+//   return this.thoughts.length;
+// });
+
+// userSchema.virtual('reactionCount').get(function () {
+//   return this.reactions.length;
+// });
+
+// userSchema.virtual('findAll').get(function () {
+//   return this.find();
+// });
 
 const User = model('User', userSchema);
 

@@ -50,6 +50,7 @@ router.get('/:thoughtId', (req,res)=> {
 })
 
 //TODO: ROUTE TO UPDATE A THOUGHT
+//Done
 router.put('/', (req,res)=> {
     Thought.findOneAndUpdate(
         {
@@ -67,6 +68,7 @@ router.put('/', (req,res)=> {
 })
 
 //TODO: ROUTE TO DELETE A THOUGHT BASED ON THOUGHT ID
+// Done
 router.delete('/:thoughtId', (req,res)=> {
     Thought.findOneAndDelete(
         {
@@ -84,6 +86,7 @@ router.delete('/:thoughtId', (req,res)=> {
 });
 
 //TODO: ROUTE TO ADD REACTION TO A THOUGHT
+//Done
 router.post('/:thoughtId/reactions', (req,res)=> {
     Thought.findOneAndUpdate(
         {
@@ -112,6 +115,7 @@ router.post('/:thoughtId/reactions', (req,res)=> {
 });
 
 //TODO: ROUTE TO DELETE A REACTION ON A THOUGHT
+//Done
 router.delete('/:thoughtId/reactions/:reactionId', (req,res)=> {
     Thought.findOneAndDelete(
         {
