@@ -26,6 +26,7 @@ Fork the repo and contribut from your testing
 
 ## Testing Intructions
 Pull repo and after you successfully launch test against endpoints under routes.
+https://youtu.be/SSPxRuN3OlE
 
 ## Questions?
 github.com/Chitosama
