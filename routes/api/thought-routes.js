@@ -5,13 +5,14 @@ const { Thought, Reaction} = require('../../models')
 //TODO: ROUTE TO GET ALL THOUGHTS
 //Done
 router.get('/', (req,res)=> {
-    Thought.find({}), (err,thoughts)=> {
+    Thought.find({}, (err,thoughts)=> {
         if(err) {
             console.log(err);
             return res.status(500).json(err);
         }
         return res.json(thoughts);
     }
+)
 })
 
 //TODO: ROUTE TO CREATE A NEW THOUGHT
@@ -51,8 +52,11 @@ router.get('/:thoughtId', (req,res)=> {
 
 //TODO: ROUTE TO UPDATE A THOUGHT
 //Done
-router.put('/', (req,res)=> {
+router.put('/:thoughtId', (req,res)=> {
     Thought.findOneAndUpdate(
+        {
+            _id: req.params.thoughtId,
+        },
         {
             thoughtText: req.body.thoughtText,
             username: req.body.username,
@@ -62,7 +66,13 @@ router.put('/', (req,res)=> {
                 console.log(err);
                 return res.status(500).json(err);
             }
-            return res.json(thought);
+            else
+            Thought.findById(
+                {_id: req.params.thoughtId,},
+                (err, thought)=> 
+                {
+                    return res.json(thought);
+                })
         }
     )
 })
@@ -79,7 +89,9 @@ router.delete('/:thoughtId', (req,res)=> {
                 console.log(err);
                 return res.status(500).json(err);
             }
-            return res.json(thought);
+            if(thought === null){
+            return res.json({message:"Thought no longer exists"});
+            }
         }
     )
 
@@ -95,13 +107,14 @@ router.post('/:thoughtId/reactions', (req,res)=> {
         {
             $push: {
                 reactions: {
-                    reactionId: req.body.reactionId,
+                    //reactionId: req.body.reactionId,
                     reactionBody: req.body.reactionBody,
                     username: req.body.username,
                 }
             }
         },
         {
+            runValidators: true,
             new: true,
         },
         (err,thought)=> {
@@ -117,13 +130,16 @@ router.post('/:thoughtId/reactions', (req,res)=> {
 //TODO: ROUTE TO DELETE A REACTION ON A THOUGHT
 //Done
 router.delete('/:thoughtId/reactions/:reactionId', (req,res)=> {
-    Thought.findOneAndDelete(
+    Thought.findOneAndUpdate(
         {
             _id: req.params.thoughtId,
-            reactions: {
-                reactionId: req.params.reactionId,
-            }
         },
+        {$pull:{
+            reactions: {
+                _id: req.params.reactionId,
+            }
+        }},
+        {runValidators: true, new: true},
         (err,thought)=> {
             if(err) {
                 console.log(err);

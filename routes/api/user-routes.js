@@ -56,17 +56,25 @@ router.get('/:userId', (req,res) => {
 //Done
 router.put('/:userId', (req,res)=> {
     User.findOneAndUpdate(
+        { _id: req.params.userId },
         {
             username: req.body.username,
             email: req.body.email,
-            friends: req.body.friends,
         },
         (err,user)=> {
             if(err) {
                 console.log(err);
                 return res.status(500).json(err);
             }
-            return res.json(user);
+            else
+            {
+                User.findById(
+                    { _id: req.params.userId },
+                    (err,user)=>{
+                        return res.json(user);
+                    }
+                )
+            }
         }
     )
 
@@ -80,11 +88,14 @@ router.delete('/:userId', (req,res)=> {
             _id: req.params.userId,
         },
         (err,user)=> {
-            if(err) {
+            if((err) || (user === null) ) {//check if user does not exist 
                 console.log(err);
-                return res.status(500).json(err);
+                return res.status(500).json({message:"User with "+ req.params.userId +" Does not exist"});
             }
-            return res.json(user);
+            else
+            {
+            return res.json({message:"User successfully deleted"});
+            }
         }
     )
 
@@ -132,11 +143,16 @@ router.delete('/:userId/friends/:friendId', (req,res)=> {
         {
             new: true,
         },
-        (err,user)=> {
+        (err,user)=> {// could improve this to check if the friend exists in the friend array and say they were never friends
             if(err) {
                 console.log(err);
                 return res.status(500).json(err);
             }
+            if(user.friends.length === 0){
+                console.log(user.friends)
+                return res.status(500).json({message:"User has no friends"})
+            }
+            console.log(user.friends)
             return res.json(user);
         }
     )
